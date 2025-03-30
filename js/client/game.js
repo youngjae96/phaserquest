@@ -66,6 +66,25 @@ Game.makeIDmap = function(collection,map){
     });
 };
 
+// ✅ 인벤토리 출력 함수 정의
+    Game.displayInventory = function(){
+        Game.inventoryGroup = game.add.group();
+        Game.inventoryGroup.fixedToCamera = true;
+
+        var startX = Game.borderPadding + 300;
+        var y = Game.barY + 5;
+
+        for (let i = 0; i < Game.player.inventory.length; i++) {
+            let item = Game.player.inventory[i];
+            let iconKey = item.name || item;  // name 필드가 없으면 그냥 문자열로
+            let iconSprite = game.add.sprite(startX + i * 32, y, 'atlas3', iconKey);
+            Game.inventoryGroup.add(iconSprite);
+        }
+
+        Game.HUD.add(Game.inventoryGroup);
+    };
+
+
 Game.create = function() {
     Game.HUD = game.add.group(); // Group containing all objects involved in the HUD
     Game.HUD.add(game.add.sprite(0, 0, 'atlas1','border')); // Adds the gray border of the game
@@ -955,24 +974,6 @@ Game.basicAtlasAnimation = function(sprite){ // sprite is the sprite to which th
 
 //======================
 // HUD CODE: HUD-related code
-
-// ✅ 인벤토리 출력 함수 정의
-    Game.displayInventory = function(){
-        Game.inventoryGroup = game.add.group();
-        Game.inventoryGroup.fixedToCamera = true;
-
-        var startX = Game.borderPadding + 300;
-        var y = Game.barY + 5;
-
-        for (let i = 0; i < Game.player.inventory.length; i++) {
-            let item = Game.player.inventory[i];
-            let iconKey = item.name || item;  // name 필드가 없으면 그냥 문자열로
-            let iconSprite = game.add.sprite(startX + i * 32, y, 'atlas3', iconKey);
-            Game.inventoryGroup.add(iconSprite);
-        }
-
-        Game.HUD.add(Game.inventoryGroup);
-    };
 
 Game.displayHUD = function() {
     var lifeX = Game.borderPadding;
