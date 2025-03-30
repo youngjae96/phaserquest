@@ -74,6 +74,11 @@ Game.makeIDmap = function(collection,map){
         var startX = Game.borderPadding + 300;
         var y = Game.barY + 5;
 
+    // ✅ inventory가 없으면 빈 배열로 초기화
+    if (!Game.player.inventory) {
+        Game.player.inventory = [];
+    }
+
         for (let i = 0; i < Game.player.inventory.length; i++) {
             let item = Game.player.inventory[i];
             let iconKey = item.name || item;  // name 필드가 없으면 그냥 문자열로
