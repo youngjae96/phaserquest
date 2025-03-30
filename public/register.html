@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입 - PhaserQuest</title>
+  <style>
+    body { font-family: sans-serif; background: #111; color: #eee; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+    input, button { padding: 10px; margin: 5px; }
+    .box { background: #222; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px #000; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>회원가입</h2>
+    <form id="registerForm">
+      <input type="text" id="username" placeholder="닉네임" required><br>
+      <input type="password" id="password" placeholder="비밀번호" required><br>
+      <button type="submit">가입하기</button>
+    </form>
+    <p>이미 가입하셨나요? <a href="/login.html">로그인</a></p>
+    <div id="message"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const res = await fetch('/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const result = await res.json();
+      const message = document.getElementById('message');
+      if (res.ok) {
+        message.textContent = '회원가입 성공! 로그인 페이지로 이동합니다...';
+        setTimeout(() => {
+          window.location.href = '/login.html';
+        }, 1000);
+      } else {
+        message.textContent = result.message;
+      }
+    });
+  </script>
+</body>
+</html>
