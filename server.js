@@ -103,10 +103,11 @@ if(myArgs.heroku){
   mongoDBName = 'heroku_4tv68zls';
 } else {
   var mongoPort = (myArgs.mongoPort || 27017);
-  var mongoServer = (myArgs.mongoServer || 'localhost');
-  mongoHost = mongoServer + ':' + mongoPort;
-  mongoDBName = 'phaserQuest';
-}
+mongo.connect(process.env.MONGO_URI, function(err, client){
+    if(err) throw(err);
+    server.db = client.db('phaserQuest');
+    console.log('Connection to db established');
+});
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
