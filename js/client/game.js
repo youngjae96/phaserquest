@@ -398,7 +398,6 @@ Game.initWorld = function(data){ // Initialize the game world based on the serve
     Game.displayHero(data.player.x,data.player.y,data.player.id);
 
     Game.displayHUD(); // Displays HUD, and sets up life bar, chat bar, the HUD buttons and their behavior
-Game.displayInventory();  // ✅ 인벤토리 HUD와 함께 출력
     Game.setUpPlayer(Game.player,data.player);
     Game.updatePlayerStatus(Game.player,data.player);
 
