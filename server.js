@@ -102,33 +102,28 @@ if(myArgs.heroku){
   mongoHost = 'heroku_4tv68zls:' + myArgs.pass + '@ds141368.mlab.com:41368';
   mongoDBName = 'heroku_4tv68zls';
 } else {
-  var mongoPort = (myArgs.mongoPort || 27017);
-mongo.connect(process.env.MONGO_URI, function(err, client){
-    if(err) throw(err);
+  mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+      console.log('✅ Mongoose로 MongoDB 연결 완료');
+    })
+    .catch(err => {
+      console.error('❌ Mongoose 연결 실패:', err);
+    });
+}
+
+// 서버 시작
+server.listen(myArgs.p || process.env.PORT || 8081, function() {
+  console.log('Listening on ' + server.address().port);
+  server.clientUpdateRate = 1000 / 5;
+  gs.readMap();
+  server.setUpdateLoop();
+
+  // MongoDB 연결
+  mongo.connect(process.env.MONGO_URI, function(err, client){
+    if (err) throw err;
     server.db = client.db('phaserQuest');
     console.log('Connection to db established');
-});
-
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log('✅ Mongoose로 MongoDB 연결 완료');
-}).catch(err => {
-  console.error('❌ Mongoose 연결 실패:', err);
-});
-
-server.listen(myArgs.p || process.env.PORT || 8081,function(){ // -p flag to specify port ; the env variable is needed for Heroku
-    console.log('Listening on '+server.address().port);
-    server.clientUpdateRate = 1000/5; // Rate at which update packets are sent
-    gs.readMap();
-    server.setUpdateLoop();
-
-    mongo.connect('mongodb://'+mongoHost,function(err, client){
-        if(err) throw(err);
-        server.db = client.db('phaserQuest');
-        console.log('Connection to db established');
-    });
+  });
 });
 
 io.on('connection',function(socket){
