@@ -438,6 +438,8 @@ Game.initWorld = function(data){ // Initialize the game world based on the serve
     if(Game.isNewPlayer) Game.toggleHelp();
 };
 
+Game.displayInventory(); // ✅ 안전한 호출 위치
+
 Game.moveGroupTo = function(parent,group,endPos){
     // parent is the Phaser Group that contains the group to move (default: world)
     // group is the Phaser Group to be moved
@@ -985,6 +987,7 @@ Game.displayHUD = function() {
         font: '16px pixel',
         fill: "#eeeeee"
     }));
+
 // ✅ 인벤토리 출력 함수 정의
     Game.displayInventory = function(){
         Game.inventoryGroup = game.add.group();
@@ -1003,9 +1006,6 @@ Game.displayHUD = function() {
         Game.HUD.add(Game.inventoryGroup);
     };
 
-    // ✅ 인벤토리 호출
-    Game.displayInventory();
-};
 
     Game.chatButton = Game.HUDbuttons.add(game.add.button(850, Game.barY + 2, 'atlas1', Game.toggleChat, this, 'talkicon_1', 'talkicon_0', 'talkicon_2'));
     Game.achButton = Game.HUDbuttons.add(game.add.button(880, Game.barY + 2, 'atlas1',Game.toggleAchievements, this, 'achievementicon_1', 'achievementicon_0', 'achievementicon_2'));
