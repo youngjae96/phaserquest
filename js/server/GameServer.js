@@ -264,7 +264,28 @@ GameServer.addNewPlayer = function(socket,data){
     // data is the data object sent by the client to request the creation of a new plaer
     if(!data.name || data.name.length == 0) return;
     var player = new Player(data.name);
-    var document = player.dbTrim();
+var document = player.dbTrim();
+
+if (socket.request.session && socket.request.session.user) {
+    document.ownerId = socket.request.session.user.id;
+}
+
+document.inventory = [];
+
+if (player.weapon) {
+    document.inventory.push({ name: player.weapon, type: "weapon", equipped: true });
+}
+if (player.armor) {
+    document.inventory.push({ name: player.armor, type: "armor", equipped: true });
+}
+
+// 기본 포션 제공
+document.inventory.push({ name: "Potion", type: "consumable", quantity: 3 });
+
+
+
+
+
     // 🔥 로그인한 유저의 ID 추가
     if (socket.request.session && socket.request.session.user) {
         document.ownerId = socket.request.session.user.id;

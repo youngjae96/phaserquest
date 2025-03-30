@@ -985,6 +985,27 @@ Game.displayHUD = function() {
         font: '16px pixel',
         fill: "#eeeeee"
     }));
+// ✅ 인벤토리 출력 함수 정의
+    Game.displayInventory = function(){
+        Game.inventoryGroup = game.add.group();
+        Game.inventoryGroup.fixedToCamera = true;
+
+        var startX = Game.borderPadding + 300;
+        var y = Game.barY + 5;
+
+        for (let i = 0; i < Game.player.inventory.length; i++) {
+            let item = Game.player.inventory[i];
+            let iconKey = item.name || item;  // name 필드가 없으면 그냥 문자열로
+            let iconSprite = game.add.sprite(startX + i * 32, y, 'atlas3', iconKey);
+            Game.inventoryGroup.add(iconSprite);
+        }
+
+        Game.HUD.add(Game.inventoryGroup);
+    };
+
+    // ✅ 인벤토리 호출
+    Game.displayInventory();
+};
 
     Game.chatButton = Game.HUDbuttons.add(game.add.button(850, Game.barY + 2, 'atlas1', Game.toggleChat, this, 'talkicon_1', 'talkicon_0', 'talkicon_2'));
     Game.achButton = Game.HUDbuttons.add(game.add.button(880, Game.barY + 2, 'atlas1',Game.toggleAchievements, this, 'achievementicon_1', 'achievementicon_0', 'achievementicon_2'));
